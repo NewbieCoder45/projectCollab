@@ -10,16 +10,16 @@
 </head>
 <body>
     <h1>
-        <%=title%>
+        Customers
     </h1>
-    <p><%=title%> Robotics</p>
-
-    <h2>Customers</h2>
-    <a href="/sql/customers"><button>Customers</button></a>
-    <h2>Products</h2>
-    <a href="/sql/products"><button>Products</button></a>
-    <h2>Payments</h2>
-    <a href="/sql/payments"><button>Payments</button></a>
+    <ul>
+        <% customerDetailsArray.forEach(customer =>{ %>
+            <li><%=customer.firstName%></li>
+            <li><%=customer.lastName%></li>
+            <li><%=customer.shippingAddress%></li>
+            <li><%=customer.postalCode%></li>
+        <%});%>
+    </ul>
 
 </body>
 </html>

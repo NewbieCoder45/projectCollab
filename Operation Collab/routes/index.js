@@ -1,16 +1,17 @@
 // Require express
 const express = require('express');
-const app = express();
+const router = express.Router()
 
 // Define a route
-app.get('/', (req, res) => {
-  res.send('Hello from Express!');
+router.get('/', function(req, res,next) {
+  //res.send('Hello from Express!');
+  res.render(
+              "index",
+              {
+              title: "Bajrang Dal", 
+              }
+            )
 });
 
-// Start the Express server
-const port = 3000;
-app.listen(port, () => {
-  console.log(`Express server running at http://localhost:${port}/`);
-});
 
 module.exports = router
