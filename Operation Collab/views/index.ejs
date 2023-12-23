@@ -6,7 +6,8 @@
     <title>
         <%=title%>
     </title>
-    <link rel="stylesheet" href="../public/stylesheets/style.css">
+    <link rel="stylesheet" href="../stylesheets/style.css">
+    <link rel="stylesheet" href="../stylesheets/index.css">
 </head>
 <body>
     <h1>
@@ -14,12 +15,44 @@
     </h1>
     <p><%=title%> Robotics</p>
 
+    <div class = "overlay">
+        <h2>Welcome to Alpha Robotics</h2>
+        <p>
+            Avail your 50% off today! Click the link below
+            and get the qr code.
+        </p>
+        <img src="/images/overlay.gif" alt="Robot waving" width="100%">
+        <button type="submit">Avail</button>
+    </div>
+    <div class = "primary-model">
     <h2>Customers</h2>
     <a href="/sql/customers"><button>Customers</button></a>
     <h2>Products</h2>
     <a href="/sql/products"><button>Products</button></a>
     <h2>Payments</h2>
     <a href="/sql/payments"><button>Payments</button></a>
+    </div>
 
+    <script>
+        //Disabling buttons in background
+        window.addEventListener('load', function(){
+        document.querySelector(".overlay").style.display = "block"
+        document.querySelector(".primary-model").style.display = "block"
+
+        document.body.style.pointerEvents = "none"
+        document.querySelector(".overlay").style.pointerEvents = "auto"
+        });
+
+        //Loading the main page
+        document.querySelector('.overlay button').addEventListener('click', function(){
+        document.querySelector('.overlay').style.display = "none"
+        document.querySelector(".primary-model").style.display = "block"
+
+        document.body.style.pointerEvents = "auto"
+        });
+
+
+
+    </script>
 </body>
 </html>
