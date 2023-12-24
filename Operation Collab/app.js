@@ -1,28 +1,33 @@
-const express = require('express');
-const createError = require('http-errors');
-const path = require('path');
+const express = require('express')
+const createError = require('http-errors')
+const path = require('path')
 
-const app = express();
+const app = express()
 
 // Extracting arrays from the customers object
-const customers = require('./routes/customer');
-const { customerDetailsArray, paymentsDetailArray, productDetailsArray } = customers;
+const customers = require('./routes/customer')
+const { customerDetailsArray, paymentsDetailArray, productDetailsArray } = customers
+
+//Extracting arrays from the plugins object
+const plugins = require("./data/jsPlugins")
 
 // Routes initialization
-const indexRouter = require('./routes/index');
-const sqlRouter = require('./routes/sql');
+const indexRouter = require('./routes/index')
+const sqlRouter = require('./routes/sql')
 
 // Setting views to use the 'views' directory
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'ejs')
 
 //Using public folder for stylesheet and images
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')))
 
+//Using views to access the data directory
+app.use(express.static(path.join(__dirname, 'data')))
 
 // / and /sql route handlers
-app.use('/', indexRouter);
-app.use('/sql', sqlRouter);
+app.use('/', indexRouter)
+app.use('/sql', sqlRouter)
 
 // // Customer-related routes
 // app.get('/customers', (req, res) => {
@@ -41,7 +46,7 @@ app.use('/sql', sqlRouter);
 
 // Error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  next(createError(404))
 });
 
 // error handler
@@ -55,10 +60,10 @@ app.use(function (err, req, res, next) {
   res.render("error")
 })
 
-app.use(express.json());
+app.use(express.json())
 
 // Start the server
-const port = 3001;
+const port = 3000;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
