@@ -22,7 +22,7 @@
             and get the qr code.
         </p>
         <img src="/images/overlay.gif" alt="Robot waving" width="100%">
-        <button type="submit">Avail</button>
+        <button type="submit" class="nav-button">Avail</button>
     </div>
     <!-- Main model -->
     <div class="primary-model">
@@ -34,9 +34,9 @@
 
 <!-- Research button -->
   <button class="nav-button resLabel" >
-    <label for="researchToggle">Research</label>
+    <label for="resToggle">Research</label>
   </button>
-  <input id="researchToggle" class="checkhack" type="checkbox" />
+  <input id="resToggle" class="checkhack" type="checkbox"/>
   <ul class="menu" id="researchMenu">
     <li><a href="/sql/customers">Customers</a></li>
     <li><a href="/sql/products">Products</a></li>
@@ -47,18 +47,18 @@
   <button class="nav-button plugLabel">
     <label for="pluginsToggle">Plugins</label>
   </button>
-  <input id="pluginsToggle" class="checkhack" type="checkbox" />
+  <input id="pluginsToggle" class="checkhack" type="checkbox"/>
   <ul class="menu" id="pluginsMenu">
     <li>
       <!-- Search for plugins -->
         <button class="nav-button search" >
             <label for="searchToggle">Search for plugins</label>
           </button>
-          <input id="searchToggle" class="checkhack" type="checkbox" />
+          <input id="searchToggle" class="checkhack" type="checkbox"/>
           <ul class="menu" id="searchMenu">
             <li>
                 <input type="search" name="Search Plugins" id="searchBox">
-                <button onclick="searchPlugins('searchResults')">Search</a></button>
+                <button onclick="searchPlugins('searchResults')" class="nav-button">Search</a></button>
                 <div id="searchResults" style="display: none;">
                 </div>
 
@@ -68,7 +68,7 @@
     </li>
     <li>
         <!-- External Links dropdown -->
-        <button class="nav-button insert" >
+        <button class="nav-button extensions" >
             <label for="extentToggle">External Links</label>
           </button>
           <input id="extentToggle" class="checkhack" type="checkbox" />
@@ -82,18 +82,16 @@
     <li><a href="/sql/payments">Payments</a></li>
   </ul>
 
+  <!-- About button -->
+
+  <button class="nav-button aboutLabel" >About</button>
+</div>
+<div id = 'restCode'>
   <h2>Customers</h2>
 
   <h2>Products</h2>
 
   <h2>Payments</h2>
-
-  <!-- Overlay for no results message -->
-  <div id="noResultsOverlay" style="display: none;">
-      <h2>No plugins found!</h2>
-      <p>Sorry, no plugins match your search criteria.</p>
-      <button onclick="hideNoResultsOverlay()">OK</button>
-  </div>
 
 </div>
 <script src="/data/jsPlugins.js"></script>
@@ -140,29 +138,90 @@ function searchPlugins(){
   }
   console.log(searchTerm)
   console.log(result)
-  
+  let pluginDetails = document.createElement('div')
   if(result != null)
   {
-    let pluginDetails = document.createElement('div')
+    
 
     pluginDetails.innerHTML = "<h2>" + result.name + "</h2>"
-                              + "<br/> <p>" + result.website + "</p><br/>"
-                              + "<p>" + result.description + "</p><br/>"
-                              + "<p>" + result.exampleUsage + "</p><br/>"
+            + "<p> Website: </p>"  + "<br/> <p>" + result.website + "</p><br/>"
+            + "<p> Plugin Description: </p>"  + "<p>" + result.description + "</p><br/>"
+            + "<p> Sample use: </p>"  + "<p>" + result.exampleUsage + "</p><br/>"
     
     searchResultsDiv.appendChild(pluginDetails)
 
   }
   else{
-    noResultsDiv.style.display = "block"
+    pluginDetails.innerHTML = "<h2>No plugins found!</h2>" +
+                              "<p>Sorry, no plugins match your search criteria.</p>"
+    searchResultsDiv.appendChild(pluginDetails)
   }
   searchResultsDiv.style.display = "block";
 }
 
-function hideNoResultsOverlay(){
-  document.getElementById('noResultsOverlay').style.display = "none"
+document.addEventListener('click', function (event) {
+  closeDropdown('.resLabel', 'resToggle', event);
+  closeDropdown('.plugLabel', 'pluginsToggle', event);
+  closeDropdown('.search', 'searchToggle', event);
+  closeDropdown('.extensions', 'extentToggle', event);
+});
+
+function closeDropdown(buttonId, toggleId, event) {
+  const button = document.querySelector(buttonId);
+  const checkbox = document.getElementById(toggleId);
+
+  if (button && checkbox) {
+    //Getting  <ul>
+    const dropdown = button.nextElementSibling.nextElementSibling; 
+
+    const rectButton = button.getBoundingClientRect();
+    const rectDropdown = dropdown.getBoundingClientRect()
+
+    const isClickInsideButton = (
+      //If it returns true, 
+      //mouseClick was outside the button
+      // same for dropdown <ul>
+      event.clientX >= rectButton.left && //false
+      event.clientX <= rectButton.right && 
+      event.clientY >= rectButton.top &&
+      event.clientY <= rectButton.bottom
+    )
+
+    const isClickInsideDropdown = (
+      event.clientX >= rectDropdown.left &&
+      event.clientX <= rectDropdown.right &&
+      event.clientY >= rectDropdown.top &&
+      event.clientY <= rectDropdown.bottom
+    )
+
+    if (!isClickInsideButton && !isClickInsideDropdown) {
+      checkbox.checked = false
+    }
+  }
 }
-  
+
+let aboutButton = document.querySelector('.aboutLabel');
+let btmDiv = document.getElementById('restCode');
+
+aboutButton.addEventListener('click', function() {
+  // Use Fetch API to load content from the specified URL
+  fetch('/sql/about')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.text();
+    })
+    .then(data => {
+      // Set the received HTML content into the 'restCode' div
+      btmDiv.innerHTML = data;
+    })
+    .catch(error => {
+      console.error('Fetch error:', error);
+    });
+});
+
+
   
 </script>
 </body>

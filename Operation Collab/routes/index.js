@@ -6,11 +6,6 @@ const router = express.Router()
 
 router.use('/data', express.static(path.join(__dirname, '../data')));
 
-// Debug logging
-router.use((req, res, next) => {
-  console.log('Request URL:', req.originalUrl);
-  next();
-});
 
 
 // Define a route
